@@ -29,8 +29,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     ApiInterface apiInterface;
     SessionManager sessionManager;
 
-    public LoginActivity(Context mMockContext) {
-    }
+    String message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public String login(String email, String password) {
+    public void login(String email, String password) {
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<Login> loginCall = apiInterface.loginResponse(email, password);
         loginCall.enqueue(new Callback<Login>() {
@@ -80,10 +79,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
-                    return "Login was successful";
+                    message = "Login was successfull";
                 } else {
                     Toast.makeText(LoginActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    return "Invalid Login";
+                    message = "Invalid login";
                 }
 
             }
@@ -91,10 +90,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onFailure(Call<Login> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                return "Invalid Login";
+                message = "Invalid login";
             }
         });
-
     }
 
 }
